@@ -507,7 +507,7 @@ if __name__ == '__main__':
         type=str,
         default='cm_TRAIN',
         choices=['cm_TRAIN','cm_EVAL','cm_PREDICT'],
-        help=('Mode choice [cm_TRAIN, cm_EVAL, cm_PREDICT]))
+        help=('Mode choice [cm_TRAIN, cm_EVAL, cm_PREDICT])')
               
     # Optimizer Parameters
 
