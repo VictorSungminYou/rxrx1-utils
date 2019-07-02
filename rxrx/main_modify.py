@@ -362,13 +362,13 @@ def main(use_tpu,
             transpose_input=transpose_input,
             use_bfloat16=use_bfloat16)
     
-    if compute-mode == cm_TRAIN:
+    if compute_mode == cm_TRAIN:
         resnet_classifier.train(input_fn=train_input_fn, max_steps=train_steps)
         
-    elif compute-mode == cm_EVAL:
+    elif compute_mode == cm_EVAL:
         resnet_classifier.evaluate(input_fn=test_input_fn)
         
-    elif compute-mode == cm_PREDICT:
+    elif compute_mode == cm_PREDICT:
         resnet_classifier.predict(input_fn=test_input_fn)
 
     tf.logging.info('Finished training up to step %d. Elapsed seconds %d.',
