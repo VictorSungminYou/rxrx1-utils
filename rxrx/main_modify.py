@@ -352,7 +352,14 @@ def main(use_tpu,
 
     start_timestamp = time.time()  # This time will include compilation time
 
-    resnet_classifier.train(input_fn=train_input_fn, max_steps=train_steps)
+    if compute-mode == TRAIN:
+        resnet_classifier.train(input_fn=train_input_fn, max_steps=train_steps)
+        
+    if compute-mode == EVAL:
+        resnet_classifier.evaluate(input_fn=train_input_fn)
+        
+    if compute-mode == PREDICT:
+        resnet_classifier.predict(input_fn=train_input_fn)
 
     tf.logging.info('Finished training up to step %d. Elapsed seconds %d.',
                     train_steps, int(time.time() - start_timestamp))
@@ -486,7 +493,13 @@ if __name__ == '__main__':
         default='bfloat16',
         choices=['bfloat16', 'float32'],
         help=('Tensorflow precision type used when defining the network.'))
-
+    p.add_argument(
+        '--compute-mode',
+        type=str,
+        default='TRAIN',
+        choices=['TRAIN','EVAL','PREDICT'],
+        help=('Mode choice [TRAIN, EVAL, PREDICT]))
+              
     # Optimizer Parameters
 
     p.add_argument('--momentum', type=float, default=0.9)
