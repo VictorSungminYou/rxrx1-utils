@@ -357,13 +357,13 @@ def main(use_tpu,
             transpose_input=transpose_input,
             use_bfloat16=use_bfloat16)
     
-    if compute-mode == TRAIN:
+    if compute-mode == cm_TRAIN:
         resnet_classifier.train(input_fn=train_input_fn, max_steps=train_steps)
         
-    elif compute-mode == EVAL:
+    elif compute-mode == cm_EVAL:
         resnet_classifier.evaluate(input_fn=test_input_fn)
         
-    elif compute-mode == PREDICT:
+    elif compute-mode == cm_PREDICT:
         resnet_classifier.predict(input_fn=test_input_fn)
 
     tf.logging.info('Finished training up to step %d. Elapsed seconds %d.',
@@ -500,9 +500,9 @@ if __name__ == '__main__':
     p.add_argument(
         '--compute-mode',
         type=str,
-        default='TRAIN',
-        choices=['TRAIN','EVAL','PREDICT'],
-        help=('Mode choice [TRAIN, EVAL, PREDICT]))
+        default='cm_TRAIN',
+        choices=['cm_TRAIN','cm_EVAL','cm_PREDICT'],
+        help=('Mode choice [cm_TRAIN, cm_EVAL, cm_PREDICT]))
               
     # Optimizer Parameters
 
