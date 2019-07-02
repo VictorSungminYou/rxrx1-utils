@@ -237,6 +237,9 @@ def resnet_model_fn(features, labels, mode, params, n_classes, num_train_images,
             top_1_accuracy = tf.metrics.accuracy(labels, predictions)
             in_top_5 = tf.cast(tf.nn.in_top_k(logits, labels, 5), tf.float32)
             top_5_accuracy = tf.metrics.mean(in_top_5)
+            
+            print(top_1_accuracy)
+            print(top_5_accuracy)
 
             return {
                 'top_1_accuracy': top_1_accuracy,
