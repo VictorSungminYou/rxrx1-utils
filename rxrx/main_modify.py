@@ -260,6 +260,7 @@ def main(use_tpu,
          model_dir,
          train_epochs,
          train_batch_size,
+         eval_batch_size,
          num_train_images,
          epochs_per_loop,
          log_step_count_epochs,
@@ -456,6 +457,11 @@ if __name__ == '__main__':
         type=int,
         default=512,
         help=('Batch size to use during training.'))
+    p.add_argument(
+        '--eval-batch-size',
+        type=int,
+        default=512,
+        help=('Batch size to use during test.'))    
     p.add_argument(
         '--n-classes',
         type=int,
