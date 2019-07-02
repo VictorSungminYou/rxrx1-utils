@@ -382,10 +382,13 @@ def main(use_tpu,
         resnet_classifier.export_saved_model(os.path.join(model_dir, 'saved_model'), serving_input_receiver_fn)
         
     elif compute_mode == 'cm_EVAL':
+        print('Evaluation start')
         eval_result = resnet_classifier.evaluate(input_fn=test_input_fn, steps=1)
         
     elif compute_mode == 'cm_PREDICT':
+        print('Prediction start')
         predictions = resnet_classifier.predict(input_fn=test_input_fn)
+        print(predictions)
 
 
 if __name__ == '__main__':
