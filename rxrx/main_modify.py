@@ -389,13 +389,13 @@ def main(use_tpu,
         print('Prediction start')
         predictions = resnet_classifier.predict(input_fn=test_input_fn)
         
-        for pred_dict, expec in zip(predictions):
-            template = ("\nPrediction is \"{}\" ({:.1f}%), expected \"{}\"")
+        #for pred_dict, expec in zip(predictions):
+        #    template = ("\nPrediction is \"{}\" ({:.1f}%), expected \"{}\"")
 
-            class_id = pred_dict["class_ids"][0]
-            probability = pred_dict["probabilities"][class_id]
+        #    class_id = pred_dict["class_ids"][0]
+        #    probability = pred_dict["probabilities"][class_id]
             
-            print(pred_dict)
+        #    print(pred_dict)
             #print(template.format(iris_data.SPECIES[class_id], 100 * probability, expec))
 
 
