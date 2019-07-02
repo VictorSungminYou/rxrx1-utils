@@ -350,6 +350,10 @@ def main(use_tpu,
 
     start_timestamp = time.time()  # This time will include compilation time
 
+    test_glob = os.path.join(url_base_path, 'test', '*.tfrecord')
+
+    tf.logging.info("Test glob: {}".format(test_glob))
+
     test_input_fn = functools.partial(rxinput.input_fn,
             input_fn_params=input_fn_params,
             tf_records_glob=test_glob,
