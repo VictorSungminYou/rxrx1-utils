@@ -369,7 +369,7 @@ def main(use_tpu,
         resnet_classifier.train(input_fn=train_input_fn, max_steps=train_steps)
         
     elif compute_mode == 'cm_EVAL':
-        resnet_classifier.evaluate(input_fn=test_input_fn)
+        resnet_classifier.evaluate(input_fn=test_input_fn, steps=1)
         
     elif compute_mode == 'cm_PREDICT':
         resnet_classifier.predict(input_fn=test_input_fn)
