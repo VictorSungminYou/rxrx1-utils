@@ -306,7 +306,7 @@ def main(use_tpu,
             PER_HOST_V2))  # pylint: disable=line-too-long
 
     model_fn = functools.partial(
-        resnet_model_fn(mode='EVAL'),
+        resnet_model_fn,
         n_classes=n_classes,
         num_train_images=num_train_images,
         data_format=data_format,
