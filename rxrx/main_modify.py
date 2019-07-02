@@ -507,10 +507,8 @@ if __name__ == '__main__':
         type=str,
         default='cm_TRAIN',
         choices=['cm_TRAIN','cm_EVAL','cm_PREDICT'],
-        help=('Mode choice [cm_TRAIN, cm_EVAL, cm_PREDICT])')
-              
+        help=('Mode choice [cm_TRAIN, cm_EVAL, cm_PREDICT]'))
     # Optimizer Parameters
-
     p.add_argument('--momentum', type=float, default=0.9)
     p.add_argument('--weight-decay', type=float, default=1e-4)
     p.add_argument(
