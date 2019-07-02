@@ -344,26 +344,30 @@ def main(use_tpu,
             transpose_input=transpose_input,
             use_bfloat16=use_bfloat16)
 
-
-
     tf.logging.info('Training for %d steps (%.2f epochs in total). Current'
                     ' step %d.', train_steps, train_steps / steps_per_epoch,
                     current_step)
 
     start_timestamp = time.time()  # This time will include compilation time
 
+    test_input_fn = functools.partial(rxinput.input_fn,
+            input_fn_params=input_fn_params,
+            tf_records_glob=test_glob,
+            pixel_stats=GLOBAL_PIXEL_STATS,
+            transpose_input=transpose_input,
+            use_bfloat16=use_bfloat16)
+    
     if compute-mode == TRAIN:
         resnet_classifier.train(input_fn=train_input_fn, max_steps=train_steps)
         
-    if compute-mode == EVAL:
-        resnet_classifier.evaluate(input_fn=train_input_fn)
+    elif compute-mode == EVAL:
+        resnet_classifier.evaluate(input_fn=test_input_fn)
         
-    if compute-mode == PREDICT:
-        resnet_classifier.predict(input_fn=train_input_fn)
+    elif compute-mode == PREDICT:
+        resnet_classifier.predict(input_fn=test_input_fn)
 
     tf.logging.info('Finished training up to step %d. Elapsed seconds %d.',
                     train_steps, int(time.time() - start_timestamp))
-
 
     elapsed_time = int(time.time() - start_timestamp)
     tf.logging.info('Finished training up to step %d. Elapsed seconds %d.',
