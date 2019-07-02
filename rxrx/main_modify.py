@@ -330,6 +330,8 @@ def main(use_tpu,
         model_fn=model_fn,
         config=config,
         train_batch_size=train_batch_size,
+        eval_batch_size=train_batch_size,
+        predict_batch_size=train_batch_size,
         export_to_tpu=False)
 
 
