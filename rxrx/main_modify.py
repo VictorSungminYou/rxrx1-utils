@@ -324,7 +324,6 @@ def main(use_tpu,
         use_tpu=use_tpu,
         resnet_depth=resnet_depth)
 
-
     resnet_classifier = tf.contrib.tpu.TPUEstimator(
         use_tpu=use_tpu,
         model_fn=model_fn,
@@ -333,7 +332,6 @@ def main(use_tpu,
         eval_batch_size=train_batch_size,
         predict_batch_size=train_batch_size,
         export_to_tpu=False)
-
 
     use_bfloat16 = (tf_precision == 'bfloat16')
 
@@ -348,12 +346,6 @@ def main(use_tpu,
             transpose_input=transpose_input,
             use_bfloat16=use_bfloat16)
 
-    tf.logging.info('Training for %d steps (%.2f epochs in total). Current'
-                    ' step %d.', train_steps, train_steps / steps_per_epoch,
-                    current_step)
-
-    start_timestamp = time.time()  # This time will include compilation time
-
     test_glob = os.path.join(url_base_path, 'test', '*.tfrecord')
 
     tf.logging.info("Test glob: {}".format(test_glob))
@@ -366,31 +358,34 @@ def main(use_tpu,
             use_bfloat16=use_bfloat16)
     
     if compute_mode == 'cm_TRAIN':
+        
+        tf.logging.info('Training for %d steps (%.2f epochs in total). Current'
+                    ' step %d.', train_steps, train_steps / steps_per_epoch,
+                    current_step)
+
+        start_timestamp = time.time()  # This time will include compilation time
         resnet_classifier.train(input_fn=train_input_fn, max_steps=train_steps)
         
+        tf.logging.info('Finished training up to step %d. Elapsed seconds %d.',
+                    train_steps, int(time.time() - start_timestamp))
+        elapsed_time = int(time.time() - start_timestamp)
+        tf.logging.info('Finished training up to step %d. Elapsed seconds %d.',
+                        train_steps, elapsed_time)
+        tf.logging.info('Exporting SavedModel.')
+
+        def serving_input_receiver_fn():
+            features = {
+              'feature': tf.placeholder(dtype=tf.float32, shape=[None, 512, 512, 6]),
+            }
+            receiver_tensors = features
+            return tf.estimator.export.ServingInputReceiver(features, receiver_tensors)
+        resnet_classifier.export_saved_model(os.path.join(model_dir, 'saved_model'), serving_input_receiver_fn)
+        
     elif compute_mode == 'cm_EVAL':
-        resnet_classifier.evaluate(input_fn=test_input_fn, steps=1)
+        eval_result = resnet_classifier.evaluate(input_fn=test_input_fn, steps=1)
         
     elif compute_mode == 'cm_PREDICT':
-        resnet_classifier.predict(input_fn=test_input_fn)
-
-    tf.logging.info('Finished training up to step %d. Elapsed seconds %d.',
-                    train_steps, int(time.time() - start_timestamp))
-
-    elapsed_time = int(time.time() - start_timestamp)
-    tf.logging.info('Finished training up to step %d. Elapsed seconds %d.',
-                    train_steps, elapsed_time)
-
-    tf.logging.info('Exporting SavedModel.')
-
-    def serving_input_receiver_fn():
-        features = {
-          'feature': tf.placeholder(dtype=tf.float32, shape=[None, 512, 512, 6]),
-        }
-        receiver_tensors = features
-        return tf.estimator.export.ServingInputReceiver(features, receiver_tensors)
-
-    resnet_classifier.export_saved_model(os.path.join(model_dir, 'saved_model'), serving_input_receiver_fn)
+        predictions = resnet_classifier.predict(input_fn=test_input_fn)
 
 
 if __name__ == '__main__':
